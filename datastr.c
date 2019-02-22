@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define MAX_BUFFER 100 // Maximum string length this program can handle
+#define MAX_BUFFER 100 
 
 struct Games
 {
@@ -11,33 +11,27 @@ struct Games
     int release_year, score;
 };
 
-// The CSV parser
 int next_field(FILE *f, char *buf, int max)
 {
     int i = 0, end = 0, quoted = 0;
 
     for (;;)
     {
-        // fetch the next character from file
         buf[i] = fgetc(f);
-        // if we encounter quotes then flip our state and immediately fetch next char
         if (buf[i] == '"')
         {
             quoted = !quoted;
             buf[i] = fgetc(f);
         }
-        // end of field on comma if we're not inside quotes
         if (buf[i] == ',' && !quoted)
         {
             break;
         }
-        // end record on newline or end of file
         if (feof(f) || buf[i] == '\n')
         {
             end = 1;
             break;
         }
-        // truncate fields that would overflow the buffer
         if (i < max - 1)
         {
             ++i;
@@ -143,7 +137,6 @@ int main()
     struct Games p;
     struct Games g[SIZE_games];
 
-    // Try to open the input file. If there is a problem, report failure and quit
     f = fopen("ign.csv", "r");
     if (!f)
     {
@@ -167,11 +160,11 @@ int main()
         i++;
     }
     printf("before");
-   // quicksort(g, 0,SIZE_games -1 );
+    
     insertionsort(g, SIZE_games);
     print_games(g, SIZE_games);
     printf("after");
 
-    fclose(f); // Always remember to close the file
+    fclose(f); 
     return EXIT_SUCCESS;
 }
